@@ -45,6 +45,8 @@
     "eslint-config-prettier": "^7.1.0",
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-react": "^7.22.0",
+    "exports-loader": "^2.0.0",
+    "html-webpack-plugin": "^4.5.1",
     "moment": "^2.27.0",
     "prettier": "^2.2.1",
     "ramda": "^0.26.1",
@@ -69,6 +71,8 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
+    "janus-gateway": "git://github.com/meetecho/janus-gateway.git",
+    "react-router-dom": "^5.2.0",
     "rxjs": "^6.6.3",
     "uuid": "^7.0.3"
   }

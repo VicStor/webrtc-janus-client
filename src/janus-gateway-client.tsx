@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import '@babel/polyfill';
+// import { Janus } from 'janus-gateway';
 import { v1 as uuidv1 } from 'uuid';
 
 interface Participant {
@@ -954,6 +955,7 @@ class JanusSubscriber extends EventTarget {
 }
 
 class JanusClient {
+  janus: any;
   server: string;
   room_id: string;
   ws: any;
@@ -1024,6 +1026,14 @@ class JanusClient {
     this.onPublisher = onPublisher;
 
     this.onSubscriber = onSubscriber;
+
+    // this.janus = Janus.init({
+    //   debug: true,
+    //   dependencies: Janus.useDefaultDependencies(),
+    //   callback: () => {
+    //     console.log('Janus GW initiated');
+    //   },
+    // });
 
     //TODO ws.refresh()
 
@@ -1484,7 +1494,7 @@ class JanusClient {
   };
 
   private transaction = async (request) => {
-    this.logger.info(`transaction - ${request.type}`);
+    this.logger.info(`transaction - ${JSON.stringify(request)}`);
 
     if (!this.connected) {
       const error = new Error(`client should be initialized before you can make transaction`);
@@ -1530,6 +1540,7 @@ class JanusClient {
       this.calls[id] = f;
     });
 
+    this.logger.info(`WS send ${r}`);
     this.ws.send(r);
 
     return p;
@@ -1557,6 +1568,14 @@ class JanusClient {
       },
     });
   };
+
+  public destroyRoom = (roomId) =>
+    this.transaction({
+      type: 'destroy_room',
+      load: {
+        roomId,
+      },
+    });
 }
 
 export { JanusClient, JanusPublisher, JanusSubscriber };

@@ -1,13 +1,12 @@
 
 html{
-    height:100%;
-    display: flex;
-    justify-content: center;
+    width: 100vw;
+    height: 100vh;
 }
 
 
 
-body{  
+body{
     -webkit-user-select: none;
     background-size: cover;
     height: 100%;
