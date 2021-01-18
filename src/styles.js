@@ -44,7 +44,7 @@ export const styles = {
       position: 'relative',
     },
     localVideo: {
-      width: '200px',
+      width: '300px',
       height: 'auto',
     },
     localVideoContainer: {
@@ -67,7 +67,7 @@ export const styles = {
       height: '100%',
     },
     localVideo: {
-      width: '200px',
+      width: '300px',
       height: 'auto',
     },
     localVideoContainer: {
@@ -93,18 +93,20 @@ export const styles = {
       height: '100%',
     },
     localVideo: {
-      width: '200px',
+      width: '300px',
       height: 'auto',
     },
     localVideoContainer: {
       position: 'absolute',
-      right: 'calc(50% - 100px)',
+      top: '50px',
+      right: '50px',
     },
   },
   3: {
     container: {
       display: 'grid',
       gridTemplateColumns: '50% 50%',
+      position: 'relative',
     },
     video: {
       width: '100%',
@@ -112,9 +114,14 @@ export const styles = {
       objectFit: 'cover',
     },
     localVideo: {
-      height: '100%',
+      width: '300px',
+      height: 'auto',
     },
-    localVideoContainer: {},
+    localVideoContainer: {
+      position: 'absolute',
+      top: '50px',
+      right: '50px',
+    },
   },
   4: {
     container: {
@@ -122,6 +129,7 @@ export const styles = {
       gridTemplateColumns: '50% 50%',
       gridTemplateRows: '50% 50%',
       height: '100%',
+      position: 'relative',
     },
     video: {
       width: '100%',
@@ -129,16 +137,13 @@ export const styles = {
       objectFit: 'cover',
     },
     localVideo: {
-      height: '100%',
+      width: '300px',
+      height: 'auto',
     },
     localVideoContainer: {
       position: 'absolute',
-      top: 'calc(50% - 80px)',
-      left: 'calc(50% + 70px)',
-      borderRadius: '200px',
-      overflow: 'hidden',
-      width: '160px',
-      height: '160px',
+      top: '50px',
+      right: '50px',
     },
   },
   5: {
@@ -147,6 +152,7 @@ export const styles = {
       gridTemplateColumns: '33.3% 33.3% 33.3%',
       gridTemplateRows: '50% 50%',
       height: '100%',
+      position: 'relative',
     },
     video: {
       width: '100%',
@@ -154,8 +160,13 @@ export const styles = {
       objectFit: 'cover',
     },
     localVideo: {
-      height: '100%',
+      width: '300px',
+      height: 'auto',
     },
-    localVideoContainer: {},
+    localVideoContainer: {
+      position: 'absolute',
+      top: '50px',
+      right: '50px',
+    },
   },
 };

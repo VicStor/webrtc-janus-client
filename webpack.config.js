@@ -7,7 +7,6 @@ module.exports = (env) => ({
   devtool: env === 'development' ? 'eval' : 'none',
   entry: {
     app: './index.js',
-    janus: './src/assets/janus.js',
   },
   output: {
     filename: '[name].js',

@@ -132,7 +132,6 @@ export default class App extends Component<AppProps, AppState> {
         key={`room-${room.room_id}`}
         style={appStyles.roomButton}
         onClick={() => {
-          console.log('--------------------------------------- Join the room');
           this.setState({
             selectedRoom: room.room_id,
           });

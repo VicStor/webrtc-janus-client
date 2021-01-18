@@ -71,6 +71,7 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
+    "antd": "^4.10.3",
     "janus-gateway": "git://github.com/meetecho/janus-gateway.git",
     "react-router-dom": "^5.2.0",
     "rxjs": "^6.6.3",

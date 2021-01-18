@@ -3,9 +3,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import '@babel/polyfill';
-// import { Janus } from 'janus-gateway';
 import { v1 as uuidv1 } from 'uuid';
-
 interface Participant {
   id: string;
   audio_codec: string;
