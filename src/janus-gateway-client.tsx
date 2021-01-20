@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import '@babel/polyfill';
+// import '@babel/polyfill';
 import { v1 as uuidv1 } from 'uuid';
 interface Participant {
   id: string;
@@ -30,7 +30,10 @@ interface JanusOptions {
     info: (...args: any[]) => void;
     error: (error: any) => void;
     json: (...args: any[]) => void;
-    tag: (tag: string, type: `success` | `info` | `error`) => (...args: any[]) => void;
+    tag: (
+      tag: string,
+      type: `success` | `info` | `error`,
+    ) => (...args: any[]) => void;
   };
 }
 
@@ -59,10 +62,16 @@ interface Logger {
   info: (...args: any[]) => void;
   error: (error: any) => void;
   json: (...args: any[]) => void;
-  tag: (tag: string, type: `success` | `info` | `error`) => (...args: any[]) => void;
+  tag: (
+    tag: string,
+    type: `success` | `info` | `error`,
+  ) => (...args: any[]) => void;
 }
 
-const getTransceiver = (pc: RTCPeerConnection, kind: 'audio' | 'video'): RTCRtpTransceiver => {
+const getTransceiver = (
+  pc: RTCPeerConnection,
+  kind: 'audio' | 'video',
+): RTCRtpTransceiver => {
   let transceiver = null;
 
   const transceivers = pc.getTransceivers();
@@ -117,7 +126,15 @@ class JanusPublisher extends EventTarget {
   constructor(options: JanusPublisherOptions) {
     super();
 
-    const { transaction, room_id, user_id, rtcConfiguration, mediaConstraints, logger, onError } = options;
+    const {
+      transaction,
+      room_id,
+      user_id,
+      rtcConfiguration,
+      mediaConstraints,
+      logger,
+      onError,
+    } = options;
 
     this.ptype = 'publisher';
 
@@ -282,23 +299,31 @@ class JanusPublisher extends EventTarget {
         this.dispatchEvent(event);
       }
 
-      this.logger.info(`[${this.ptype}] oniceconnectionstatechange ${this.pc.iceConnectionState}`);
+      this.logger.info(
+        `[${this.ptype}] oniceconnectionstatechange ${this.pc.iceConnectionState}`,
+      );
     };
 
     this.pc.onnegotiationneeded = () => {
-      this.logger.info(`[${this.ptype}] onnegotiationneeded ${this.pc.signalingState}`);
+      this.logger.info(
+        `[${this.ptype}] onnegotiationneeded ${this.pc.signalingState}`,
+      );
     };
 
     this.pc.onicegatheringstatechange = (e) => {
       this.iceGatheringState = this.pc.iceGatheringState;
 
-      this.logger.info(`[${this.ptype}] onicegatheringstatechange ${this.pc.iceGatheringState}`);
+      this.logger.info(
+        `[${this.ptype}] onicegatheringstatechange ${this.pc.iceGatheringState}`,
+      );
     };
 
     this.pc.onsignalingstatechange = (e) => {
       this.signalingState = this.pc.signalingState;
 
-      this.logger.info(`[${this.ptype}] onicegatheringstatechange ${this.pc.signalingState}`);
+      this.logger.info(
+        `[${this.ptype}] onicegatheringstatechange ${this.pc.signalingState}`,
+      );
 
       if (this.pc.signalingState === 'closed' && !this.terminated) {
         this.renegotiate({
@@ -360,7 +385,9 @@ class JanusPublisher extends EventTarget {
       direction: 'sendonly',
     };
 
-    const stream: MediaStream = await navigator.mediaDevices.getUserMedia(media);
+    const stream: MediaStream = await navigator.mediaDevices.getUserMedia(
+      media,
+    );
 
     this.stream = stream;
 
@@ -752,7 +779,9 @@ class JanusSubscriber extends EventTarget {
         this.dispatchEvent(event);
       }
 
-      this.logger.info(`oniceconnectionstatechange ${this.pc.iceConnectionState}`);
+      this.logger.info(
+        `oniceconnectionstatechange ${this.pc.iceConnectionState}`,
+      );
     };
 
     this.pc.onicecandidateerror = (error) => {
@@ -1165,7 +1194,10 @@ class JanusClient {
     this.keepAlive = undefined;
   };
 
-  public join = async (room_id: string, mediaConstraints?: MediaStreamConstraints): Promise<void> => {
+  public join = async (
+    room_id: string,
+    mediaConstraints?: MediaStreamConstraints,
+  ): Promise<void> => {
     this.room_id = room_id;
 
     if (this.publisher) {
@@ -1319,7 +1351,9 @@ class JanusClient {
     const { sender, data } = json;
 
     if (!this.publisher) {
-      const error = new Error(`onTrickle - publisher undefined for ${sender}...`);
+      const error = new Error(
+        `onTrickle - publisher undefined for ${sender}...`,
+      );
       this.onError(error);
       return;
     }
@@ -1331,14 +1365,18 @@ class JanusClient {
     }
 
     if (this.publisher.handle_id == sender) {
-      this.logger.success(`received trickle candidate for publisher ${sender}...`);
+      this.logger.success(
+        `received trickle candidate for publisher ${sender}...`,
+      );
       this.publisher.receiveTrickleCandidate(data);
     } else {
       for (const id in this.subscribers) {
         const subscriber = this.subscribers[id];
 
         if (subscriber.handle_id == sender) {
-          this.logger.success(`received trickle candidate for subscriber ${sender}...`);
+          this.logger.success(
+            `received trickle candidate for subscriber ${sender}...`,
+          );
           subscriber.receiveTrickleCandidate(data);
         }
       }
@@ -1352,7 +1390,9 @@ class JanusClient {
       const feed = publisher.id;
 
       if (this.subscribers[feed]) {
-        this.logger.error(`onPublishers - subscriber ${feed} already attached for room ${this.room_id}`);
+        this.logger.error(
+          `onPublishers - subscriber ${feed} already attached for room ${this.room_id}`,
+        );
         continue;
       }
 
@@ -1495,7 +1535,9 @@ class JanusClient {
     this.logger.info(`transaction - ${JSON.stringify(request)}`);
 
     if (!this.connected) {
-      const error = new Error(`client should be initialized before you can make transaction`);
+      const error = new Error(
+        `client should be initialized before you can make transaction`,
+      );
       throw error;
     }
 
@@ -1517,17 +1559,26 @@ class JanusClient {
         this.logger.info(`timeout called for ${id}`);
         delete this.calls[id];
         const error = new Error(`${request.type} - timeout`);
+        navigator.serviceWorker.controller.postMessage({
+          type: 'WS-TIMEOUT-KEEPALIVE',
+        });
         reject(error);
       }, this.transactionTimeout);
 
       const f = (message) => {
-        this.logger.info(`resolving transaction ${id} - ${message.transaction}`);
+        this.logger.info(
+          `resolving transaction ${id} - ${message.transaction}`,
+        );
         if (message.transaction === id) {
           clearTimeout(t);
           delete this.calls[id];
           if (message.type === 'error') {
             this.logger.error(request);
             const error = new Error(message.load);
+            navigator.serviceWorker.controller.postMessage({
+              type: 'WS-RESPONCE-ERROR',
+              data: message.load,
+            });
             reject(error);
           } else {
             resolve(message);

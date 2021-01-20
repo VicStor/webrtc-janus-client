@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { v1 as uuidv1 } from 'uuid';
 
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import App from './app';
 
 const params = new URLSearchParams(window.location.href);
@@ -21,3 +22,5 @@ ReactDOM.render(
   <App server={server} user_id={user_id} />,
   document.getElementById('root'),
 );
+
+serviceWorkerRegistration.registerSW();

@@ -61,8 +61,10 @@ export default class App extends Component<AppProps, AppState> {
       .then((devices) =>
         devices.reduce(
           (inputs, device) => {
-            if (device.kind === 'videoinput') return { ...inputs, cams: [...inputs.cams, device] };
-            if (device.kind === 'audioinput') return { ...inputs, mics: [...inputs.mics, device] };
+            if (device.kind === 'videoinput')
+              return { ...inputs, cams: [...inputs.cams, device] };
+            if (device.kind === 'audioinput')
+              return { ...inputs, mics: [...inputs.mics, device] };
             return inputs;
           },
           { cams: [], mics: [] },
@@ -210,6 +212,10 @@ export default class App extends Component<AppProps, AppState> {
                 audio: true,
               }}
               getCustomStyles={this.getCustomStyles}
+              renderContainer={(content, isConnected) => {
+                if (!isConnected) return <div>Can not connect to server</div>;
+                return content;
+              }}
             />
           </div>
           <div style={appStyles.roomWrapper as React.CSSProperties}>

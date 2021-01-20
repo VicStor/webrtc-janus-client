@@ -1,0 +1,9 @@
+{
+  "name": "WebRTC Demo",
+  "short_name": "WebRTC Demo",
+  "orientation": "portrait",
+  "display": "standalone",
+  "start_url": ".",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
