@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { v1 as uuidv1 } from 'uuid';
 
-import App from './src/App';
+import App from './app';
 
 const params = new URLSearchParams(window.location.href);
 let user_id = params.get(`user_id`);
@@ -16,6 +16,8 @@ const wsProtocol = process.env.NODE_ENV === 'development' ? 'ws' : 'wss';
 const server = `${wsProtocol}://${window.location.hostname}${serverPort}`;
 
 console.log('WS server: ', server);
-const app = document.getElementById('application');
 
-ReactDOM.render(<App server={server} user_id={user_id} />, app);
+ReactDOM.render(
+  <App server={server} user_id={user_id} />,
+  document.getElementById('root'),
+);

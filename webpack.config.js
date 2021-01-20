@@ -1,12 +1,20 @@
 const path = require('path');
+const fs = require('fs');
+
 const webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+
+const appDirectory = fs.realpathSync(process.cwd());
+const resolveApp = (relativePath) => path.resolve(appDirectory, relativePath);
+
+console.log(`appDirectory ${appDirectory}`);
 
 module.exports = (env) => ({
   mode: env,
   devtool: env === 'development' ? 'eval' : 'none',
   entry: {
-    app: './index.js',
+    // app: './index.js',
+    app: resolveApp('src/index'),
   },
   output: {
     filename: '[name].js',
@@ -77,7 +85,7 @@ module.exports = (env) => ({
       'process.env.NODE_ENV': JSON.stringify(env),
     }),
     new HtmlWebpackPlugin({
-      template: 'index.html',
+      template: resolveApp('public/index.html'),
     }),
   ],
 });
