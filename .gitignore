@@ -1,2 +1,12 @@
-node_modules
-development
+.idea/
+.vscode/
+node_modules/
+dist
+.DS_Store
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+yarn.lock
+
+.npm/
