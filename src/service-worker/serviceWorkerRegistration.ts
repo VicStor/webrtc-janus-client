@@ -156,8 +156,14 @@ export function unregister() {
 export const registerSW = (): void => {
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      console.log('Regestering SW...');
-      navigator.serviceWorker.register('/sw.js');
+      navigator.serviceWorker
+        .register('/sw.js')
+        .then(() => {
+          console.log('SW registered');
+        })
+        .catch((err) => {
+          console.log('Can not register SW', err.message);
+        });
     });
   }
 };

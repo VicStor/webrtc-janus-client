@@ -2,10 +2,6 @@ import { precacheAndRoute } from 'workbox-precaching';
 
 // precacheAndRoute(self.__WB_MANIFEST);
 
-// workbox.precaching.precacheAndRoute(self.__precacheManifest);
-
-console.log('in pwa');
-
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
@@ -13,10 +9,7 @@ self.addEventListener('message', (event) => {
 });
 
 // The precaching code provided by Workbox. You don't need to change this part.
-self.__precacheManifest = [].concat(self.__precacheManifest || []);
-// workbox.precaching.suppressWarnings()
-console.log('self.__precacheManifest ', self.__precacheManifest);
-precacheAndRoute(self.__precacheManifest, {});
+precacheAndRoute(self.__WB_MANIFEST);
 
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'WS-TIMEOUT-KEEPALIVE') {
