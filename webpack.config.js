@@ -4,23 +4,23 @@ const fs = require('fs');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
-const { InjectManifest, GenerateSW } = require('workbox-webpack-plugin');
-var WebpackPwaManifest = require('webpack-pwa-manifest');
+const { InjectManifest } = require('workbox-webpack-plugin');
+const WebpackPwaManifest = require('webpack-pwa-manifest');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = (relativePath) => path.resolve(appDirectory, relativePath);
-
-console.log(`appDirectory ${appDirectory}`);
 
 module.exports = (env) => ({
   mode: env,
   devtool: env === 'development' ? 'eval' : 'none',
   entry: {
     app: resolveApp('src/index'),
+    'get-vizio-client': resolveApp('src/get-vizio-client.js'),
   },
   output: {
-    filename: '[name].js',
-    path: path.resolve(__dirname, 'dist'),
+    filename: '[name]_[hash].js',
+    path: resolveApp('dist'),
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.json', '.css'],
@@ -31,16 +31,14 @@ module.exports = (env) => ({
   devServer: {
     port: 3000,
     hot: true,
+    https: {
+      key: resolveApp('certificates/server.key'),
+      cert: resolveApp('certificates/server.crt'),
+      // ca: resolveApp('certificates/rootCA.pem'),
+    },
   },
   module: {
     rules: [
-      {
-        test: require.resolve('janus-gateway'),
-        loader: 'exports-loader',
-        options: {
-          exports: 'Janus',
-        },
-      },
       {
         test: /\.(css|scss)$/,
         use: ['style-loader', 'css-loader'],
@@ -83,6 +81,8 @@ module.exports = (env) => ({
   },
   target: 'web',
   plugins: [
+    new webpack.ProgressPlugin(),
+    new CleanWebpackPlugin(),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(env),
       'process.env.DIST_URL': JSON.stringify(env),
@@ -94,7 +94,6 @@ module.exports = (env) => ({
       inject: true,
       template: resolveApp('public/index.html'),
     }),
-    // new GenerateSW(),
     new WebpackPwaManifest({
       short_name: 'WebRTC Demo',
       name: 'WebRTC Demo',
@@ -102,17 +101,29 @@ module.exports = (env) => ({
       display: 'standalone',
       theme_color: '#000000',
       background_color: '#ffffff',
+      icons: [
+        {
+          src: resolveApp('public/favicon.ico'),
+          sizes: '64x64 32x32 24x24 16x16',
+          type: 'image/x-icon',
+        },
+        {
+          src: resolveApp('public/logo192.png'),
+          type: 'image/png',
+          sizes: '192x192',
+        },
+        {
+          src: resolveApp('public/logo512.png'),
+          type: 'image/png',
+          sizes: '512x512',
+        },
+      ],
     }),
     new InjectManifest({
-      swSrc: resolveApp('src/src-sw.js'),
+      swSrc: resolveApp('src/service-worker/service-worker'),
       swDest: 'sw.js',
-      maximumFileSizeToCacheInBytes: 2240000,
+      maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
+      exclude: [/\.map$/, /asset-manifest\.json$/, /LICENSE/],
     }),
-    // new InjectManifest({
-    //   swSrc: resolveApp('src/service-worker'),
-    //   dontCacheBustURLsMatching: /\.[0-9a-f]{8}\./,
-    //   exclude: [/\.map$/, /asset-manifest\.json$/, /LICENSE/],
-    //   maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
-    // }),
   ],
 });
