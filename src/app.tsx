@@ -2,11 +2,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from 'react';
 import { Component } from 'react';
-import Select from 'react-select';
 
 import './assets/styles.css';
 import { JanusVideoRoom } from './react-videoroom-janus';
 import { logger } from './utils';
+import AppMenu from './app-menu';
 import { styles, appStyles } from './styles';
 
 interface AppProps {
@@ -106,11 +106,40 @@ export default class App extends Component<AppProps, AppState> {
     logger.info('onDisconnected', error);
   };
 
-  onRooms = (rooms: any) => {
+  onRooms = (rooms: any[]) => {
     logger.info('onRooms', rooms);
+    rooms.forEach((room) => {
+      document.addEventListener(
+        room.room_id,
+        this.setSelectedRoom(room.room_id),
+      );
+    });
     this.setState({
       rooms,
     });
+    document.addEventListener(
+      'keydown',
+      (event) => {
+        console.log(`GOT "keydown" event `, event);
+        const eventCode = event.keyCode;
+        const code1 = 49;
+
+        console.log(`GOT "eventCode" `, eventCode);
+        if (eventCode >= code1 && eventCode < code1 + 9) {
+          const roomIdx = eventCode - code1;
+          const { rooms } = this.state;
+          const room = rooms[roomIdx];
+          console.log(`roomIdx: ${roomIdx} room `, room);
+
+          if (!room) {
+            logger.error(`Please select room up to ${rooms.length}`);
+            return;
+          }
+          this.setSelectedRoom(room.room_id)();
+        }
+      },
+      false,
+    );
   };
 
   onError = (error: any) => {
@@ -123,6 +152,12 @@ export default class App extends Component<AppProps, AppState> {
 
   onParticipantLeft = (participant: any) => {
     logger.info('onParticipantLeft', participant);
+  };
+
+  setSelectedRoom = (selectedRoom) => () => {
+    this.setState({
+      selectedRoom,
+    });
   };
 
   renderRooms() {
@@ -146,43 +181,26 @@ export default class App extends Component<AppProps, AppState> {
   }
 
   render() {
+    const { cameras, selectedCamera, mics, selectedMicrophone } = this.state;
     if (this.state.cameras.length === 0) return null;
     return (
       <div style={appStyles.mainWrapper as React.CSSProperties}>
-        <div style={appStyles.menuWrapper}>
-          <div
-            style={{
-              padding: `10px`,
-            }}
-          >
-            <Select
-              isDisabled={true}
-              options={this.state.cameras}
-              inputValue={this.state.selectedCamera.label}
-              onChange={(selectedCamera) => {
-                this.setState({
-                  selectedCamera,
-                });
-              }}
-            />
-          </div>
-          <div
-            style={{
-              padding: `10px`,
-            }}
-          >
-            <Select
-              isDisabled={true}
-              options={this.state.mics}
-              inputValue={this.state.selectedMicrophone.label}
-              onChange={(selectedMicrophone) => {
-                this.setState({
-                  selectedMicrophone,
-                });
-              }}
-            />
-          </div>
-        </div>
+        <AppMenu
+          cameras={cameras}
+          selectedCamera={selectedCamera}
+          mics={mics}
+          selectedMicrophone={selectedMicrophone}
+          setCamera={(selectedCamera) => {
+            this.setState({
+              selectedCamera,
+            });
+          }}
+          setMic={(selectedMicrophone) => {
+            this.setState({
+              selectedMicrophone,
+            });
+          }}
+        />
         <div
           style={{
             width: '100%',

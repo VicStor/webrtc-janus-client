@@ -49,7 +49,7 @@ export const styles = {
     },
     localVideoContainer: {
       position: 'absolute',
-      top: '50px',
+      bottom: '50px',
       right: '50px',
     },
   },
@@ -72,7 +72,7 @@ export const styles = {
     },
     localVideoContainer: {
       position: 'absolute',
-      top: '50px',
+      bottom: '50px',
       right: '50px',
     },
   },
@@ -98,7 +98,7 @@ export const styles = {
     },
     localVideoContainer: {
       position: 'absolute',
-      top: '50px',
+      bottom: '50px',
       right: '50px',
     },
   },
@@ -119,7 +119,7 @@ export const styles = {
     },
     localVideoContainer: {
       position: 'absolute',
-      top: '50px',
+      bottom: '50px',
       right: '50px',
     },
   },
@@ -142,7 +142,7 @@ export const styles = {
     },
     localVideoContainer: {
       position: 'absolute',
-      top: '50px',
+      bottom: '50px',
       right: '50px',
     },
   },
@@ -165,7 +165,7 @@ export const styles = {
     },
     localVideoContainer: {
       position: 'absolute',
-      top: '50px',
+      bottom: '50px',
       right: '50px',
     },
   },

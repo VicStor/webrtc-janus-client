@@ -19,7 +19,7 @@ module.exports = (env) => ({
     'get-vizio-client': resolveApp('src/get-vizio-client.js'),
   },
   output: {
-    filename: '[name]_[hash].js',
+    filename: '[name].[hash].js',
     path: resolveApp('dist'),
   },
   resolve: {
