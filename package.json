@@ -24,6 +24,7 @@
     "@babel/plugin-transform-arrow-functions": "^7.2.0",
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
+    "@types/chrome": "0.0.128",
     "@types/react": "^16.4.16",
     "@types/sdp-transform": "^2.4.3",
     "@typescript-eslint/eslint-plugin": "^4.13.0",

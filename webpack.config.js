@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
 const fs = require('fs');
 
@@ -17,9 +18,15 @@ module.exports = (env) => ({
   entry: {
     app: resolveApp('src/index'),
     'get-vizio-client': resolveApp('src/get-vizio-client.js'),
+    background: resolveApp('src/extension/background.js'),
+    foreground: resolveApp('src/extension/foreground.js'),
   },
   output: {
-    filename: '[name].[hash].js',
+    filename: (_info) => {
+      // TBD configure output
+      // console.lno-unusedog('output.filename ', info);
+      return '[name].[hash].js';
+    },
     path: resolveApp('dist'),
   },
   resolve: {
@@ -27,15 +34,19 @@ module.exports = (env) => ({
   },
   optimization: {
     minimize: env === 'production',
+    splitChunks: {
+      name: 'vendor',
+      chunks: 'initial',
+    },
   },
   devServer: {
     port: 3000,
     hot: true,
-    https: {
-      key: resolveApp('certificates/server.key'),
-      cert: resolveApp('certificates/server.crt'),
-      // ca: resolveApp('certificates/rootCA.pem'),
-    },
+    // https: {
+    //   key: resolveApp('certificates/server.key'),
+    //   cert: resolveApp('certificates/server.crt'),
+    //   // ca: resolveApp('certificates/rootCA.pem'),
+    // },
   },
   module: {
     rules: [
@@ -95,9 +106,10 @@ module.exports = (env) => ({
       template: resolveApp('public/index.html'),
     }),
     new WebpackPwaManifest({
-      short_name: 'WebRTC Demo',
+      manifest_version: 2,
       name: 'WebRTC Demo',
-      icons: [],
+      short_name: 'WebRTC Demo',
+      description: 'VIZIO POC application',
       display: 'standalone',
       theme_color: '#000000',
       background_color: '#ffffff',
@@ -118,6 +130,20 @@ module.exports = (env) => ({
           sizes: '512x512',
         },
       ],
+      browser_action: {
+        default_icon: 'icon.png',
+        default_popup: 'popup.html',
+      },
+      content_scripts: [
+        {
+          matches: ['<all_urls>'],
+          js: ['js/vendor.js', 'js/content_script.js'],
+        },
+      ],
+      background: {
+        scripts: ['js/vendor.js', 'js/background.js'],
+      },
+      permissions: ['tabs', 'storage', '<all_urls>'],
     }),
     new InjectManifest({
       swSrc: resolveApp('src/service-worker/service-worker'),

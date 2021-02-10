@@ -11,10 +11,10 @@ if (!user_id) {
   user_id = uuidv1();
 }
 
-// const serverPort = process.env.NODE_ENV === 'development' ? ':8080' : '';
-// const wsProtocol = process.env.NODE_ENV === 'development' ? 'ws' : 'wss';
-// const server = `${wsProtocol}://${window.location.hostname}${serverPort}`;
-const server = `wss://janus.janus-demo.live`;
+const serverPort = process.env.NODE_ENV === 'development' ? ':8080' : '';
+const wsProtocol = process.env.NODE_ENV === 'development' ? 'ws' : 'wss';
+const server = `${wsProtocol}://${window.location.hostname}${serverPort}`;
+// const server = `wss://janus.janus-demo.live`;
 
 document.addEventListener('VIZIO_LIBRARY_DID_LOAD', () => {
   ReactDOM.render(
